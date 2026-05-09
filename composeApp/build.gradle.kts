@@ -42,11 +42,15 @@ compose.desktop {
         mainClass = "tim.projekt.bsw.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb ,TargetFormat.Exe)
             packageName = "tim.projekt.bsw"
             packageVersion = "1.0.0"
+            description = "Instant file search BSW"
+            copyright = "© 2026 timaborovikov"
             windows {
-                iconFile.set(project.file("src/jvmMain/composeResources/drawable/icon.png "))
+                shortcut = true
+                menu = true
+                iconFile.set(project.file("src/jvmMain/resources/icon.ico"))
             }
         }
     }
