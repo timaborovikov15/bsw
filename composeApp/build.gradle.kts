@@ -44,9 +44,10 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb ,TargetFormat.Exe)
             packageName = "tim.projekt.bsw"
-            packageVersion = "1.0.0"
+            packageVersion = "1.0.2"
             description = "Instant file search BSW"
             copyright = "© 2026 timaborovikov"
+            modules("java.sql")
             windows {
                 shortcut = true
                 menu = true
