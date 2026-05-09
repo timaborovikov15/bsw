@@ -9,7 +9,7 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "BSW Search",
 
-        icon = painterResource("icon.png")
+        icon = painterResource("icon.ico")
     ) {
         App()
     }
