@@ -240,22 +240,29 @@ fun saveLicenseLocally(key: String) {
 }
 
 suspend fun verifyLicenseOnline(key: String): Boolean {
-    // 1. Сначала проверяем тестовый ключ локально (без интернета)
-    if (key.trim() == "TEST-KEY") return true
+    val cleanKey = key.trim().uppercase()
 
-    // 2. Только если ключ другой, пытаемся стучаться на сервер оплаты
-    val client = HttpClient(CIO)
-    return try {
-        val response: HttpResponse = client.post("https://gumroad.com") {
-            parameter("product_permalink", "твой_id")
-            parameter("license_key", key)
-        }
-        client.close()
-        response.status.value == 200
-    } catch (e: Exception) {
-        client.close()
-        false // Если интернета нет или ключ не подошел к серверу
-    }
+    // 1. Быстрый пропуск для теста (оставляем старый ключ)
+    if (cleanKey == "TEST-KEY") return true
+
+    // 2. Проверяем формат через регулярное выражение BSW-XXXX-XXXX-XXXX (где X - цифры)
+    val regex = Regex("^BSW-\\d{4}-\\d{4}-\\d{4}$")
+    if (!regex.matches(cleanKey)) return false
+
+    // 3. Разделяем ключ по дефисам
+    val parts = cleanKey.split("-")
+    if (parts.size != 4) return false
+
+    // Вытаскиваем блоки цифр
+    val part1 = parts[1].toIntOrNull() ?: return false
+    val part2 = parts[2].toIntOrNull() ?: return false
+    val part3 = parts[3].toIntOrNull() ?: return false
+
+    // Секретный математический паттерн проверки (чек-сумма)
+    val check1 = (part1 * 7) % 9999 == part2
+    val check2 = (part1 + part2) % 8888 == part3
+
+    return check1 && check2
 }
 
 
